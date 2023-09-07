@@ -1,0 +1,12 @@
+fiftyone==0.21.6
+fiftyone_brain==0.13.1
+fiftyone_db==0.4.0
+fiftyone_desktop==0.29.0
+matplotlib==3.7.1
+numpy==1.25.2
+pandas==2.0.0
+PyYAML==6.0.1
+scikit_learn==1.2.2
+scikit_multilearn==0.2.0
+tqdm==4.65.0
+ultralytics==8.0.166

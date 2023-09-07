@@ -26,6 +26,10 @@ def main_arg_parser() -> argparse.Namespace:
     parser.add_argument('--imgsz', metavar='imgsz', type=tuple, help='YOLO model path')
     parser.add_argument('--trainsz', default=0.7, type=float, help='Size of training partition')
     parser.add_argument('--impact', default='True', type=str, help='Model mode. False == predict.')
+    parser.add_argument('--preds', default='', type=str, help='Use your predictions')
+    parser.add_argument('--save_preds', default='False', type=str, help='Save your predictions')
+    parser.add_argument('--vis', default='', type=str, help='Use saved visualization')
+    parser.add_argument('--save_vdata', default='False', type=str, help='Save visualization dataset')
     args = parser.parse_args()
     return args
 
@@ -93,7 +97,9 @@ def YOLOres2COCO(results: ultralytics.engine.results.Results, image_id: int) -> 
 def get_predictions(
     model: ultralytics.models.yolo.model.YOLO,
     images_path: Path,
-    images_df: pd.DataFrame
+    images_df: pd.DataFrame,
+    PREDS: str = '',
+    SAVE_PREDS: bool = False
 ) -> pd.DataFrame:
     """
     Generate predictions using a YOLO model for a list of images.
@@ -107,10 +113,13 @@ def get_predictions(
     :return: A DataFrame containing the predictions in COCO-style format.
     :rtype: pd.DataFrame
     """
+    return pd.read_csv(PREDS) if PREDS else None
+
     preds_df = pd.DataFrame(columns=["image_id", "label_id", "xmin", "ymin", "xmax", "ymax", "score"])
     for img in tqdm(range(len(images_df)), desc='Making predictions'):
         output = model.predict(images_path / images_df['file_name'][img], verbose=False, conf=0.1)
         pred = YOLOres2COCO(output, images_df['image_id'][img]).drop(columns=['target_id'])
         preds_df = pd.concat([preds_df, pred], ignore_index=True)
     preds_df = preds_df.reset_index().rename(columns={"index": "pred_id"})
+    preds_df.to_csv('preds', index=False) if SAVE_PREDS else None
     return preds_df

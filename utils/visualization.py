@@ -36,7 +36,7 @@ def make_charts(impact: Dict[str, float]):
     return
 
 
-def create_fiftyone_dataset(data_path: Path) -> fo.Dataset:
+def create_fiftyone_dataset(data_path: Path, VIS: str = '') -> fo.Dataset:
     """
     Create a FiftyOne dataset from COCO-style data.
 
@@ -45,27 +45,41 @@ def create_fiftyone_dataset(data_path: Path) -> fo.Dataset:
     :return: A FiftyOne dataset.
     :rtype: fiftyone.core.dataset.Dataset
     """
-    print('Creating a FiftyOne dataset:')
-    dataset = fo.Dataset.from_dir(
-        overwrite=True,
-        name='Error Analysis Dataset',
-        dataset_dir=data_path,
-        dataset_type=fo.types.COCODetectionDataset,
-        data_path='./images/',
-        label_types='detections',
-        include_id=True,
-        include_annotation_id=True
-    )
+
+    if VIS:
+        print('Loading a FiftyOne dataset:')
+        dataset = fo.Dataset.from_dir(
+            overwrite=True,
+            name='Error Analysis Dataset',
+            dataset_dir=data_path,
+            dataset_type=fo.types.COCODetectionDataset,
+            data_path='./images/',
+            labels_path=VIS,
+            include_id=True,
+            include_annotation_id=True
+        )
+    else:
+        print('Creating a FiftyOne dataset:')
+        dataset = fo.Dataset.from_dir(
+            overwrite=True,
+            name='Error Analysis Dataset',
+            dataset_dir=data_path,
+            dataset_type=fo.types.COCODetectionDataset,
+            data_path='./images/',
+            label_types='detections',
+            include_id=True,
+            include_annotation_id=True
+        )
     return dataset
 
 
 def convert_coordinates(
-        xmin: float,
-        ymin: float,
-        xmax: float,
-        ymax: float,
-        image_width: float,
-        image_height: float
+    xmin: float,
+    ymin: float,
+    xmax: float,
+    ymax: float,
+    image_width: float,
+    image_height: float
 ) -> list:
     """
     Convert bounding box coordinates from absolute to normalized coordinates.
@@ -100,10 +114,10 @@ def convert_coordinates(
 
 
 def convert_preds(
-        dataset: fo.Dataset,
-        preds_df: pd.DataFrame,
-        errors_df: pd.DataFrame,
-        id2label: Dict[int, str]
+    dataset: fo.Dataset,
+    preds_df: pd.DataFrame,
+    errors_df: pd.DataFrame,
+    id2label: Dict[int, str]
 ) -> None:
     """
     Convert predictions to FiftyOne format and attach them to samples in a FiftyOne dataset.
@@ -160,11 +174,11 @@ def convert_preds(
 
 
 def add_error_labels(
-        dataset: fo.Dataset,
-        missed_df: pd.DataFrame,
-        targets_df: pd.DataFrame,
-        images_df: pd.DataFrame,
-        images_path: Path
+    dataset: fo.Dataset,
+    missed_df: pd.DataFrame,
+    targets_df: pd.DataFrame,
+    images_df: pd.DataFrame,
+    images_path: Path
 ) -> None:
     """
     Add the 'missed' tag to detections in a FiftyOne dataset based on information from dataframes.
@@ -195,13 +209,15 @@ def add_error_labels(
 
 
 def visualize(
-        data_path: Path,
-        images_path: Path,
-        targets_df: pd.DataFrame,
-        images_df: pd.DataFrame,
-        preds_df: pd.DataFrame,
-        errors_df: pd.DataFrame,
-        id2label: Dict[int, str]
+    data_path: Path,
+    images_path: Path,
+    targets_df: pd.DataFrame,
+    images_df: pd.DataFrame,
+    preds_df: pd.DataFrame,
+    errors_df: pd.DataFrame,
+    id2label: Dict[int, str],
+    VIS: str = '',
+    SAVE_VDATA: bool = False
 ) -> None:
     """
     Visualize data using the FiftyOne app.
@@ -221,13 +237,28 @@ def visualize(
     :param id2label: A dictionary mapping label IDs to label names.
     :type id2label: dict
     """
-    # Create a FiftyOne dataset
-    dataset = create_fiftyone_dataset(data_path)
 
+    # Create a FiftyOne dataset
+    # if VIS:
+    #     dataset = fo.load_dataset('./visualization')
+    # else:
+    #     dataset = create_fiftyone_dataset(data_path)
+    dataset = create_fiftyone_dataset(data_path, VIS)
     # Convert predictions and add error labels
-    convert_preds(dataset, preds_df, errors_df, id2label)
-    missed_df = errors_df[errors_df["error_type"] == 'missed'].reset_index().drop(columns=['index'])
-    add_error_labels(dataset, missed_df, targets_df, images_df, images_path)
+    if not VIS:
+        convert_preds(dataset, preds_df, errors_df, id2label)
+        missed_df = errors_df[errors_df["error_type"] == 'missed'].reset_index().drop(columns=['index'])
+        add_error_labels(dataset, missed_df, targets_df, images_df, images_path)
+
+    # if SAVE_VDATA:
+        # print('Saving a FiftyOne dataset:\n')
+        # dataset.export(
+        #     export_dir = str(data_path / 'visualization'),
+        #     dataset_type = fo.types.COCODetectionDataset,
+        #     export_media = False,
+        #     overwrite = True,
+        #     label_field = ["detections", "predictions"]
+        # )
 
     # Launch the FiftyOne app to visualize the data
     session = fo.launch_app(dataset)
@@ -235,4 +266,5 @@ def visualize(
 
     # Print session information
     print(session)
+
     return
