@@ -15,13 +15,17 @@
 
 
 ## Установка
-1. Установите [PyTorch](https://pytorch.org/get-started/locally/) (рекомендуется использовать GPU).
-2. Установите зависимости:
+1. Установите Python >= 3.10.
+2. Установите [PyTorch](https://pytorch.org/get-started/locally/) (рекомендуется использовать GPU).
+3. Установите зависимости:
 ```python -m pip install -r requirements.txt```
 
 ## Использование
-- Запуск в режиме поиска ошибок (для обучения *train=True*): 
+- Запуск в режиме поиска ошибок (для обучения *train=True*):
+  Linux:
 ``` python3 main.py --data='./dataset' --model='./models/default/demo.pt' --train=False --impact=True ```
+  Windows:
+``` python3 main.py --data=".\\dataset" --model=".\\models\\default\\demo.pt" --train=False --impact=True ```
 - Описание параметров:
     - **data** = './dataset' (путь к директории с данными).
     - **model** = './models/my_model.pt' (модель)
