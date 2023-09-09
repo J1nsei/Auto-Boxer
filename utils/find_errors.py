@@ -315,5 +315,3 @@ def _format_errors_as_dataframe(
     )
 
     return errors_df
-
-

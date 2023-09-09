@@ -4,6 +4,7 @@ from utils.dataset_creation import *
 from utils.find_errors import *
 from utils.visualization import *
 from utils.evaluate_errors import *
+import os
 
 
 def main():
@@ -21,7 +22,7 @@ def main():
     SAVE_PREDS = args.save_preds.lower() == 'true'
     VIS = args.vis
     SAVE_VDATA = args.save_vdata.lower() == 'true'
-
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model = YOLO(MODEL)
     if TRAIN_MODE:
         create_yolo_dataset(DATA_PATH, TRAIN_FRACTION)
@@ -29,7 +30,7 @@ def main():
     else:
         images_df, targets_df = load_dataset(DATA_PATH)
         images_path, id2label = get_utils_variables(DATA_PATH)
-        preds_df = get_predictions(model, images_path, images_df, PREDS, SAVE_PREDS)
+        preds_df = get_predictions(model, device, images_path, images_df, PREDS, SAVE_PREDS)
         errors_df = classify_predictions_errors(targets_df, preds_df)
         print(f"Total predictions: {len(preds_df)}, Total errors: {len(errors_df)}")
         print(errors_df["error_type"].value_counts())

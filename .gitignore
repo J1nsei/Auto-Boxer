@@ -1,6 +1,11 @@
 dataset/
 .idea
 .git
+.ipynb_checkpoints
 data.yaml
 preds.txt
+preds
+preds.csv
+errors
+errors.csv
 utils/__pycache__
