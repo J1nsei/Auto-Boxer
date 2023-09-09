@@ -22,10 +22,11 @@
 
 ## Использование
 - Запуск в режиме поиска ошибок (для обучения *train=True*):
-  Linux:
-``` python3 main.py --data='./dataset' --model='./models/default/demo.pt' --train=False --impact=True ```
-  Windows:
-``` python3 main.py --data=".\\dataset" --model=".\\models\\default\\demo.pt" --train=False --impact=True ```
+    - Linux:
+        ``` python3 main.py --data='./dataset' --model='./models/default/demo.pt' --train=False --impact=True ```
+
+    - Windows:
+        ``` python main.py --data=".\\dataset" --model=".\\models\\default\\demo.pt" --train=False --impact=True --train=False --impact=True ```
 - Описание параметров:
     - **data** = './dataset' (путь к директории с данными).
     - **model** = './models/my_model.pt' (модель)
