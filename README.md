@@ -49,4 +49,4 @@
 - [ ]  Add saving for error labeled fiftyone dataset.
 - [ ]  Add a parameter dictionary reading for the YOLO model.
 - [ ]  Complete the contents of the readme file. 
-- [ ]  Add a demo.
+- [x]  Add a demo.
