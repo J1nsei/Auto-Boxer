@@ -51,7 +51,7 @@ class MyMeanAveragePrecision:
                         dtype=torch.float32,
                     ).to(self.device),
                     "labels": torch.as_tensor(
-                        im_preds_df["label_id"].values, dtype=torch.int64
+                        im_preds_df["label_id"].to_numpy(dtype='int16'), dtype=torch.int64
                     ).to(self.device),
                     "scores": torch.as_tensor(
                         im_preds_df["score"].values, dtype=torch.float32
