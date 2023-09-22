@@ -109,7 +109,6 @@ def calculate_error_impact(
     }
     impact[metric_name] = baseline_metric
 
-
     return impact
 
 

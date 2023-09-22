@@ -99,8 +99,6 @@ def stratified_data_split(
 
     return train_subset, val_subset, test_subset
 
-def convert_id(yolo_id: int, id2labelYolo: dict, id2label: dict) -> int:
-    return list(id2label.items())[yolo_id][0]
 
 def convert_coco(labels_dir='../coco/annotations/'):
     """Converts COCO dataset annotations to a format suitable for training YOLOv5 models.

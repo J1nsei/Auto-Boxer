@@ -43,7 +43,6 @@ def main():
                 preds_df
             )
             make_charts(impact)
-            print('charts')
         visualize(DATA_PATH, images_path, targets_df, images_df, preds_df, errors_df, id2label, VIS, SAVE_VDATA)
     print('\nDONE')
 
