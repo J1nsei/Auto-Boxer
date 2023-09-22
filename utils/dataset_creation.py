@@ -99,6 +99,8 @@ def stratified_data_split(
 
     return train_subset, val_subset, test_subset
 
+def convert_id(yolo_id: int, id2labelYolo: dict, id2label: dict) -> int:
+    return list(id2label.items())[yolo_id][0]
 
 def convert_coco(labels_dir='../coco/annotations/'):
     """Converts COCO dataset annotations to a format suitable for training YOLOv5 models.
@@ -130,6 +132,8 @@ def convert_coco(labels_dir='../coco/annotations/'):
         fn.mkdir(parents=True, exist_ok=True)
         with open(json_file) as f:
             data = json.load(f)
+
+        coco2yolo = {cat["id"]: i for i, cat in enumerate(data["categories"])}
         coco80 = [cat["id"] for cat in data["categories"]]
         # Create image dict
         images = {f'{x["id"]:d}': x for x in data['images']}
@@ -155,7 +159,7 @@ def convert_coco(labels_dir='../coco/annotations/'):
                 if box[2] <= 0 or box[3] <= 0:  # if w <= 0 and h <= 0
                     continue
 
-                cls = coco80[ann['category_id']]  # class
+                cls = coco2yolo[coco80[ann['category_id']]]  # class
                 box = [cls] + box.tolist()
                 if box not in bboxes:
                     bboxes.append(box)

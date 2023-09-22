@@ -84,7 +84,7 @@ def calculate_error_impact(
     :return impact: Dictionary with one key for the metric without fixing and
         one for each error type.
     """
-    print('\n Calculating the impact of errors \n')
+    print('\nCalculating the impact of errors \n')
     ensure_consistency(errors_df, targets_df, preds_df)
 
     metric_values = {
@@ -108,6 +108,8 @@ def calculate_error_impact(
         for error, error_metric in metric_values.items()
     }
     impact[metric_name] = baseline_metric
+
+
     return impact
 
 

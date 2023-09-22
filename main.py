@@ -30,7 +30,7 @@ def main():
     else:
         images_df, targets_df = load_dataset(DATA_PATH)
         images_path, id2label = get_utils_variables(DATA_PATH)
-        preds_df = get_predictions(model, device, images_path, images_df, PREDS, SAVE_PREDS)
+        preds_df = get_predictions(model, device, images_path, images_df, id2label, PREDS, SAVE_PREDS)
         errors_df = classify_predictions_errors(targets_df, preds_df)
         print(f"Total predictions: {len(preds_df)}, Total errors: {len(errors_df)}")
         print(errors_df["error_type"].value_counts())
@@ -43,6 +43,7 @@ def main():
                 preds_df
             )
             make_charts(impact)
+            print('charts')
         visualize(DATA_PATH, images_path, targets_df, images_df, preds_df, errors_df, id2label, VIS, SAVE_VDATA)
     print('\nDONE')
 

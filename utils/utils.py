@@ -105,6 +105,7 @@ def get_predictions(
     device: str,
     images_path: Path,
     images_df: pd.DataFrame,
+    id2label: Dict,
     PREDS: str = '',
     SAVE_PREDS: bool = False
 ) -> pd.DataFrame:
@@ -128,5 +129,7 @@ def get_predictions(
         pred = YOLOres2COCO(output, images_df['image_id'][img]).drop(columns=['target_id'])
         preds_df = pd.concat([preds_df, pred], ignore_index=True)
     preds_df = preds_df.reset_index().rename(columns={"index": "pred_id"})
+    yolo2coco = {i: cat for i, cat in enumerate(id2label)}
+    preds_df['label_id'] = preds_df['label_id'].map(yolo2coco)
     preds_df.to_csv('preds', index=False) if SAVE_PREDS else None
     return preds_df
