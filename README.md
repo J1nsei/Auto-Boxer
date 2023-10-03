@@ -2,42 +2,42 @@
 
 ![](https://github.com/J1nsei/Auto-Boxer/blob/main/utils/idea.gif)
 
-## Описание
-**Auto-Boxer** - это инструмент, разработанный для облегчения и автоматизации процесса анализа разметки данных в задачах компьютерного зрения и машинного обучения. Он предоставляет мощные возможности по обнаружению и отображению ошибок в разметке данных, такие как неправильно установленные метки классов, некорректно заданные ограничительные рамки (bounding boxes) или даже отсутствие разметки. Кроме того, присутствует удобная визуализация ошибок с помощью *fiftyone*, а также анализ их вклада в метрику *mAP*. 
+## Description
+**Auto-Boxer** is a tool designed to facilitate and automate the process of analyzing data annotation in the context of object detection. It provides powerful capabilities to detect and display errors in data annotation, such as misplaced class labels, incorrectly defined bounding boxes, or even missing annotation. In addition, there is a useful visualization of errors using *FiftyOne*, as well as analysis of their contribution to the *mAP* metric. 
 
-### Типы ошибок:
-- **Classification error (CLS)**: некорректная метка класса (т.е локализовано верно, но классифицировано неверно).
-- **Localization error (LOC)**: локализовано неправильно, классифицировано верно. 
-- **Classification and Localization error (CLS & LOC)**: неверная классификация и локализация одновременно. 
-- **Duplicate detection error (DUP)**: цель обнаружена верно, однако существует более правильная детекция (confidence score выше).
-- **Background error (BKG)**: обнаружен фон как передний план.
-- **Missed target error (MISS)**: необнаруженные цели, которые не были отмечены как ошибки классификации или локализации.
+### Error types:
+- **Classification error (CLS)**: incorrect class label (i.e. localized correctly but classified incorrectly).
+- **Localization error (LOC)**: localized incorrectly, classified correctly. 
+- **Classification and Localization error (CLS & LOC)**: incorrect classification and localization at the same time. 
+- **Duplicate detection error (DUP)**: Target detected correctly, but there is a more correct detection (confidence score higher).
+- **Background error (BKG)**: Background detected as foreground.
+- **Missed target error (MISS)**: Undetected targets that have not been marked as classification or localization errors.
 
 
-## Установка
-1. Установите Python >= 3.10.
-2. Установите [PyTorch](https://pytorch.org/get-started/locally/) (рекомендуется использовать GPU).
-3. Установите зависимости:
+## Installation
+1. Install Python >= 3.10.
+2. Install [PyTorch](https://pytorch.org/get-started/locally/) (GPU recommended).
+3. Install dependencies:
 ```python -m pip install -r requirements.txt```
 
-## Использование
-- Запуск в режиме поиска ошибок (для обучения *train=True*):
+## Usage
+- Run in error search mode (for training *train=True*):
     - Linux:
         ``` python3 main.py --data='./dataset' --model='./models/default/demo.pt' --train=False --impact=True ```
 
     - Windows:
-        ``` python main.py --data=".\\dataset" --model=".\\models\\default\\demo.pt" --train=False --impact=True --train=False --impact=True ```
-- Описание параметров:
-    - **data** = './dataset' (путь к директории с данными).
-    - **model** = './models/my_model.pt' (модель)
-    - **impact** = True (включение рассчета влияния ошибок на метрику)
-## Формат и хранение данных
-- Данные должны быть размечены в формате **COCO**.
-- Формат хранения:
+        ``` python main.py --data=".\\dataset" --model=".\\models\\default\\demo.pt" --train=False --impact=True ```
+- Description of parameters:
+    - **data** = './dataset' (path to the data directory).
+    - **model** = './models/my_model.pt' (model)
+    - **impact** = True (enabling calculation of the impact of errors on the metric)
+## Data format and storage
+- Data must be labeled in **COCO** format.
+- Storage Format:
     ```bash
     ├── dataset
-    │   ├── labels.json  <--------- файл с аннотациями
-    │   └── images       <--------- изображения
+    │   ├── labels.json  <--------- annotation file
+    │   └── images       <--------- images
     │       ├── img1.jpg
     │       ├── ...
     │       └── imgN.jpg
@@ -46,8 +46,8 @@
     ├── main.py
     └── README.md
     ```
-## Использование собственной модели
-Чтобы использовать собственную натренированную модель YOLOv8, поместите файл с весами в папку *models* и при запуске укажите к ним путь (```--model='./models/my_model.pt'``` ).
+## Using your own model
+To use your own trained YOLOv8 model, place the file with the weights in the *models* folder and specify the path to them when running (```--model='./models/my_model.pt'``` ).
 
 ## Task list
 - [ ]  Add saving for error labeled fiftyone dataset.
