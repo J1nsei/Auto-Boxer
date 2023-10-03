@@ -9,3 +9,5 @@ preds.csv
 errors
 errors.csv
 utils/__pycache__
+*.jpg
+*.png
