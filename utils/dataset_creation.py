@@ -132,7 +132,7 @@ def convert_coco(labels_dir='../coco/annotations/'):
             data = json.load(f)
 
         coco2yolo = {cat["id"]: i for i, cat in enumerate(data["categories"])}
-        coco80 = [cat["id"] for cat in data["categories"]]
+
         # Create image dict
         images = {f'{x["id"]:d}': x for x in data['images']}
         # Create image-annotations dict
@@ -156,8 +156,7 @@ def convert_coco(labels_dir='../coco/annotations/'):
                 box[[1, 3]] /= h  # normalize y
                 if box[2] <= 0 or box[3] <= 0:  # if w <= 0 and h <= 0
                     continue
-
-                cls = coco2yolo[coco80[ann['category_id']]]  # class
+                cls = coco2yolo[ann['category_id']]  # class
                 box = [cls] + box.tolist()
                 if box not in bboxes:
                     bboxes.append(box)

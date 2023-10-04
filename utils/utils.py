@@ -29,7 +29,7 @@ def main_arg_parser() -> argparse.Namespace:
                         help='Dataset path')
     parser.add_argument('--model', '--m', metavar='MODEL', type=str, default='./models/default/yolov8s.pt',
                         help='YOLO model path')
-    parser.add_argument('--imgsz', metavar='imgsz', type=tuple_type, help='Image size: imgsz="(512,512)"')
+    parser.add_argument('--create_dataset', default='False', type=str, help='Create YOLO dataset')
     parser.add_argument('--trainsz', default=0.7, type=float, help='Size of training partition')
     parser.add_argument('--impact', default='True', type=str, help='Model mode. False == predict.')
     parser.add_argument('--preds', default='', type=str, help='Use your predictions')
@@ -102,12 +102,13 @@ def YOLOres2COCO(results: ultralytics.engine.results.Results, image_id: int) -> 
 
 def get_predictions(
     model: ultralytics.models.yolo.model.YOLO,
-    device: str,
+    device,
     images_path: Path,
     images_df: pd.DataFrame,
     id2label: Dict,
+    pred_args: Dict,
     PREDS: str = '',
-    SAVE_PREDS: bool = False
+    SAVE_PREDS: bool = False,
 ) -> pd.DataFrame:
     """
     Generate predictions using a YOLO model for a list of images.
@@ -125,7 +126,7 @@ def get_predictions(
         return pd.read_csv(PREDS)
     preds_df = pd.DataFrame(columns=["image_id", "label_id", "xmin", "ymin", "xmax", "ymax", "score"])
     for img in tqdm(range(len(images_df)), desc='Making predictions'):
-        output = model.predict(images_path / images_df['file_name'][img], device=device, verbose=False, conf=0.1)
+        output = model.predict(images_path / images_df['file_name'][img], device=device, **pred_args)
         pred = YOLOres2COCO(output, images_df['image_id'][img]).drop(columns=['target_id'])
         preds_df = pd.concat([preds_df, pred], ignore_index=True)
     preds_df = preds_df.reset_index().rename(columns={"index": "pred_id"})

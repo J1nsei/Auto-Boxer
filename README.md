@@ -3,7 +3,7 @@
 ![](https://github.com/J1nsei/Auto-Boxer/blob/main/utils/idea.gif)
 
 ## Description
-**Auto-Boxer** is a tool designed to facilitate and automate the process of analyzing data annotation in the context of object detection. It provides powerful capabilities to detect and display errors in data annotation, such as misplaced class labels, incorrectly defined bounding boxes, or even missing annotation. In addition, there is a useful visualization of errors using *FiftyOne*, as well as analysis of their contribution to the *mAP* metric. 
+**Auto-Boxer** is a tool designed to facilitate and automate the process of analyzing data annotation in the context of object detection. It provides powerful capabilities to detect and display errors in data annotation, such as misplaced class labels, incorrectly defined bounding boxes, or even missing annotation. In addition, there is a useful visualization of errors using *FiftyOne*, as well as analysis of their contribution to the *mAP* metric. A small demonstration of the program results is available in [demo.ipynb](https://github.com/J1nsei/Auto-Boxer/blob/main/demo.ipynb).
 
 ### Error types:
 - **Classification error (CLS)**: incorrect class label (i.e. localized correctly but classified incorrectly).
@@ -37,7 +37,7 @@
     ```bash
     ├── dataset
     │   ├── labels.json  <--------- annotation file
-    │   └── images       <--------- images
+    │   └── images       <--------- images folder
     │       ├── img1.jpg
     │       ├── ...
     │       └── imgN.jpg
@@ -51,6 +51,6 @@ To use your own trained YOLOv8 model, place the file with the weights in the *mo
 
 ## Task list
 - [ ]  Add saving for error labeled fiftyone dataset.
-- [ ]  Add a parameter dictionary reading for the YOLO model.
+- [x]  Add a parameter dictionary reading for the YOLO model.
 - [ ]  Complete the contents of the readme file. 
 - [x]  Add a demo.
