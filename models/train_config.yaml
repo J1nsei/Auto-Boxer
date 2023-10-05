@@ -1,0 +1,7 @@
+data: data.yaml
+imgsz: [0, 0]
+epochs: 20
+batch: -1
+save: True
+verbose: True
+seed: 0
